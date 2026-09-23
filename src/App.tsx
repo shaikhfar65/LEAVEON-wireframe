@@ -1,13 +1,19 @@
 import { useState } from 'react';
+import { BookOpen, CalendarDays, CalendarRange, ClipboardCheck, LayoutDashboard, LogOut, Settings, Users, WalletCards } from 'lucide-react';
+import { AttendanceTab, LeaveTab } from './AttendanceLeaveTabs';
+import { FacultyTaskTab } from './FacultyTaskTab';
+import { SchedulePlannerTab } from './SchedulePlannerTab';
 
 // ── shared data ────────────────────────────────────────────────────────────────
 const navItems = [
-  { label: 'Dashboard', key: 'dashboard' },
-  { label: 'My Leaves', key: 'leaves' },
-  { label: 'Team Requests', key: 'requests' },
-  { label: 'Attendance', key: 'attendance' },
-  { label: 'Payroll', key: 'payroll' },
-  { label: 'Settings', key: 'settings' },
+  { label: 'Dashboard', key: 'dashboard', icon: LayoutDashboard },
+  { label: 'My Leaves', key: 'leaves', icon: CalendarDays },
+  { label: 'Team Requests', key: 'requests', icon: Users },
+  { label: 'Attendance', key: 'attendance', icon: ClipboardCheck },
+  { label: 'Schedule', key: 'schedule', icon: CalendarRange },
+  { label: 'Task', key: 'tasks', icon: BookOpen },
+  { label: 'Payroll', key: 'payroll', icon: WalletCards },
+  { label: 'Settings', key: 'settings', icon: Settings },
 ];
 
 const summaryCards = [
@@ -20,13 +26,22 @@ const summaryCards = [
 function Sidebar({ active, onNavigate }: { active: string; onNavigate: (k: string) => void }) {
   return (
     <aside style={{ width: 240, height: '100%', backgroundColor: '#FFFFFF', borderRight: '1px solid #E0E0E0', flexShrink: 0, padding: '32px 24px', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ fontSize: 18, fontWeight: 700, color: '#111111', marginBottom: 40, letterSpacing: '-0.01em' }}>LEAVEON</div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 40 }}>
+        <svg aria-hidden="true" width="30" height="30" viewBox="0 0 30 30" fill="none">
+          <rect width="30" height="30" rx="9" fill="#243B53" />
+          <path d="M9 8.5V21.5H20.5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M15.5 15.5L18 18L22 12.5" stroke="#2F80ED" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <span style={{ fontSize: 18, fontWeight: 800, color: '#243B53', letterSpacing: '0.02em' }}>LEAVEON</span>
+      </div>
       <nav style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         {navItems.map((item) => {
           const isActive = item.key === active;
+          const Icon = item.icon;
           return (
             <div key={item.key} onClick={() => onNavigate(item.key)}
-              style={{ display: 'flex', alignItems: 'center', fontSize: 14, fontWeight: isActive ? 700 : 400, color: isActive ? '#111111' : '#666666', cursor: 'pointer', padding: '8px 12px', borderRadius: 6, backgroundColor: isActive ? '#F4F5F7' : 'transparent', borderLeft: isActive ? '3px solid #222222' : '3px solid transparent', marginLeft: -12, width: 'calc(100% + 12px)' }}>
+              style={{ display: 'flex', alignItems: 'center', fontSize: 14, fontWeight: isActive ? 700 : 400, color: isActive ? '#243B53' : '#486581', cursor: 'pointer', padding: '8px 12px', borderRadius: 6, backgroundColor: isActive ? '#EAF3FE' : 'transparent', borderLeft: isActive ? '3px solid #2F80ED' : '3px solid transparent', marginLeft: -12, width: 'calc(100% + 12px)' }}>
+              <Icon aria-hidden="true" size={17} strokeWidth={isActive ? 2.4 : 2} style={{ marginRight: 10, flexShrink: 0 }} />
               {item.label}
             </div>
           );
@@ -189,7 +204,7 @@ function ManagementRequestForm({ onBack }: { onBack: () => void }) {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 20 }}>
             <div><label style={labelStyle}>Estimated Start Date</label><input type="date" style={inputStyle} /></div>
-            <div><label style={labelStyle}>Proposed Budget Range / Level</label><select style={selectStyle}><option value="">Select level...</option><option>IC3 — $80k–$100k</option><option>IC4 — $100k–$130k</option><option>IC5 — $130k–$170k</option></select></div>
+            <div><label style={labelStyle}>Proposed Budget Range / Level</label><select style={selectStyle}><option value="">Select level...</option><option>IC3 — ₹80k–₹100k</option><option>IC4 — ₹100k–₹130k</option><option>IC5 — ₹130k–₹170k</option></select></div>
           </div>
           <div>
             <label style={labelStyle}>Business Justification &amp; Impact</label>
@@ -291,7 +306,7 @@ function HRReviewPanel({ onBack }: { onBack: () => void }) {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 20, marginBottom: 24 }}>
               {[
                 { label: 'Department', value: 'Engineering' },
-                { label: 'Budget Range', value: 'Band 7: $140k – $170k' },
+                { label: 'Budget Range', value: 'Band 7: ₹140k – ₹170k' },
                 { label: 'Target Hire Date', value: 'Nov 1, 2026' },
               ].map((item) => (
                 <div key={item.label}>
@@ -405,24 +420,24 @@ function HRReviewPanel({ onBack }: { onBack: () => void }) {
 
 // ── Payroll Page ───────────────────────────────────────────────────────────────
 const payslipRows = [
-  { period: 'Aug 1 – Aug 31, 2026', payDate: 'Sep 1, 2026', gross: '$10,500.00', deductions: '$2,050.00', net: '$8,450.00' },
-  { period: 'Jul 1 – Jul 31, 2026', payDate: 'Aug 1, 2026', gross: '$10,500.00', deductions: '$2,050.00', net: '$8,450.00' },
-  { period: 'Jun 1 – Jun 30, 2026', payDate: 'Jul 1, 2026', gross: '$10,500.00', deductions: '$2,050.00', net: '$8,450.00' },
-  { period: 'May 1 – May 31, 2026', payDate: 'Jun 1, 2026', gross: '$10,500.00', deductions: '$2,050.00', net: '$8,450.00' },
+  { period: 'Aug 1 – Aug 31, 2026', payDate: 'Sep 1, 2026', gross: '₹10,500.00', deductions: '₹2,050.00', net: '₹8,450.00' },
+  { period: 'Jul 1 – Jul 31, 2026', payDate: 'Aug 1, 2026', gross: '₹10,500.00', deductions: '₹2,050.00', net: '₹8,450.00' },
+  { period: 'Jun 1 – Jun 30, 2026', payDate: 'Jul 1, 2026', gross: '₹10,500.00', deductions: '₹2,050.00', net: '₹8,450.00' },
+  { period: 'May 1 – May 31, 2026', payDate: 'Jun 1, 2026', gross: '₹10,500.00', deductions: '₹2,050.00', net: '₹8,450.00' },
 ];
 
 const deductionItems = [
-  { label: 'Federal Tax', amount: '$1,150.00', pct: 55, color: '#EF4444' },
-  { label: 'State Tax', amount: '$420.00', pct: 20, color: '#F59E0B' },
-  { label: 'Health Insurance', amount: '$280.00', pct: 13, color: '#3B82F6' },
-  { label: '401(k)', amount: '$200.00', pct: 10, color: '#8B5CF6' },
+  { label: 'Federal Tax', amount: '₹1,150.00', pct: 55, color: '#EF4444' },
+  { label: 'State Tax', amount: '₹420.00', pct: 20, color: '#F59E0B' },
+  { label: 'Health Insurance', amount: '₹280.00', pct: 13, color: '#3B82F6' },
+  { label: '401(k)', amount: '₹200.00', pct: 10, color: '#8B5CF6' },
 ];
 
 const adminEmployees = [
-  { name: 'Sarah Jenkins', role: 'Sr. Frontend Engineer', salary: '$120,000 / yr', freq: 'Monthly', bonus: '+$450.00', deductions: '-$1,200.00', net: '$8,800.00', status: 'Ready', statusBg: '#DCFCE7', statusColor: '#16A34A' },
-  { name: 'Michael Vance', role: 'DevOps Lead', salary: '$135,000 / yr', freq: 'Monthly', bonus: '+$0.00', deductions: '-$1,350.00', net: '$9,900.00', status: 'Ready', statusBg: '#DCFCE7', statusColor: '#16A34A' },
-  { name: 'Alex Chen', role: 'Product Manager', salary: '$115,000 / yr', freq: 'Monthly', bonus: '+$750.00', deductions: '-$1,100.00', net: '$9,233.00', status: 'Pending Approval', statusBg: '#FEF3C7', statusColor: '#92400E' },
-  { name: 'Priya Patel', role: 'Data Analyst', salary: '$98,000 / yr', freq: 'Monthly', bonus: '+$200.00', deductions: '-$950.00', net: '$7,417.00', status: 'Ready', statusBg: '#DCFCE7', statusColor: '#16A34A' },
+  { name: 'Sarah Jenkins', role: 'Sr. Frontend Engineer', salary: '₹120,000 / yr', freq: 'Monthly', bonus: '+₹450.00', deductions: '-₹1,200.00', net: '₹8,800.00', status: 'Ready', statusBg: '#DCFCE7', statusColor: '#16A34A' },
+  { name: 'Michael Vance', role: 'DevOps Lead', salary: '₹135,000 / yr', freq: 'Monthly', bonus: '+₹0.00', deductions: '-₹1,350.00', net: '₹9,900.00', status: 'Ready', statusBg: '#DCFCE7', statusColor: '#16A34A' },
+  { name: 'Alex Chen', role: 'Product Manager', salary: '₹115,000 / yr', freq: 'Monthly', bonus: '+₹750.00', deductions: '-₹1,100.00', net: '₹9,233.00', status: 'Pending Approval', statusBg: '#FEF3C7', statusColor: '#92400E' },
+  { name: 'Priya Patel', role: 'Data Analyst', salary: '₹98,000 / yr', freq: 'Monthly', bonus: '+₹200.00', deductions: '-₹950.00', net: '₹7,417.00', status: 'Ready', statusBg: '#DCFCE7', statusColor: '#16A34A' },
 ];
 
 function PayrollPage() {
@@ -464,15 +479,15 @@ function PayrollPage() {
             {/* Net Pay card */}
             <div style={{ ...cardStyle, display: 'flex', flexDirection: 'column', gap: 10 }}>
               <span style={{ fontSize: 13, fontWeight: 600, color: '#6B7280' }}>Net Pay (Latest)</span>
-              <div style={{ fontSize: 32, fontWeight: 800, color: '#111111', letterSpacing: '-0.02em', fontFamily: 'monospace' }}>$8,450.00</div>
+              <div style={{ fontSize: 32, fontWeight: 800, color: '#111111', letterSpacing: '-0.02em', fontFamily: 'monospace' }}>₹8,450.00</div>
               <span style={{ fontSize: 12, color: '#9CA3AF' }}>Paid Sep 1, 2026</span>
               <button style={{ marginTop: 6, height: 38, borderRadius: 8, border: 'none', backgroundColor: '#222222', fontSize: 13, fontWeight: 700, color: '#FFFFFF', cursor: 'pointer' }}>
                 📄 Download Latest Payslip
               </button>
             </div>
             {[
-              { label: 'YTD Gross Earnings', value: '$88,200.00', sub: 'Jan – Aug 2026' },
-              { label: 'YTD Tax Withheld', value: '$18,520.00', sub: 'Federal + State' },
+              { label: 'YTD Gross Earnings', value: '₹88,200.00', sub: 'Jan – Aug 2026' },
+              { label: 'YTD Tax Withheld', value: '₹18,520.00', sub: 'Federal + State' },
             ].map(c => (
               <div key={c.label} style={{ ...cardStyle }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: '#6B7280', marginBottom: 10 }}>{c.label}</div>
@@ -524,8 +539,8 @@ function PayrollPage() {
                 {/* Stacked bar */}
                 <div style={{ marginBottom: 20 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <span style={{ fontSize: 13, color: '#6B7280' }}>Gross Pay: <strong style={{ color: '#111111', fontFamily: 'monospace' }}>$10,500.00</strong></span>
-                    <span style={{ fontSize: 13, color: '#6B7280' }}>Total Deductions: <strong style={{ color: '#EF4444', fontFamily: 'monospace' }}>$2,050.00</strong></span>
+                    <span style={{ fontSize: 13, color: '#6B7280' }}>Gross Pay: <strong style={{ color: '#111111', fontFamily: 'monospace' }}>₹10,500.00</strong></span>
+                    <span style={{ fontSize: 13, color: '#6B7280' }}>Total Deductions: <strong style={{ color: '#EF4444', fontFamily: 'monospace' }}>₹2,050.00</strong></span>
                   </div>
                   <div style={{ height: 14, borderRadius: 99, overflow: 'hidden', display: 'flex', backgroundColor: '#F3F4F6' }}>
                     {deductionItems.map(d => (
@@ -613,7 +628,7 @@ function PayrollPage() {
           {/* 4 metric cards */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20, marginBottom: 28 }}>
             {[
-              { label: 'Upcoming Payroll Run', value: '$342,800.00', sub: 'Due: Sep 30, 2026', accent: '#7C3AED' },
+              { label: 'Upcoming Payroll Run', value: '₹342,800.00', sub: 'Due: Sep 30, 2026', accent: '#7C3AED' },
               { label: 'Total Active Employees', value: '128', sub: 'Employees', accent: '#2563EB' },
               { label: 'Pending Bonus Approvals', value: '3', sub: 'Requests pending', accent: '#F59E0B' },
               { label: 'Compliance Status', value: '🟢 All Clear', sub: 'All taxes up to date', accent: '#16A34A' },
@@ -714,6 +729,8 @@ function SettingsPage({ onBack, onMobilePreview }: { onBack: () => void; onMobil
   const [activeTab, setActiveTab] = useState('profile');
   const [fullName, setFullName] = useState('Sarah Jenkins');
   const [email, setEmail] = useState('sarah.j@company.com');
+  const [roleType, setRoleType] = useState('Employee');
+  const [customRole, setCustomRole] = useState('');
 
   const inputStyle: React.CSSProperties = {
     width: '100%', height: 40, border: '1px solid #E5E7EB', borderRadius: 8,
@@ -770,6 +787,11 @@ function SettingsPage({ onBack, onMobilePreview }: { onBack: () => void; onMobil
               </div>
             );
           })}
+          <div style={{ height: 1, backgroundColor: '#F3F4F6', margin: '10px 8px' }} />
+          <button onClick={onBack} style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '10px 14px', border: 'none', borderRadius: 8, backgroundColor: 'transparent', cursor: 'pointer', fontSize: 14, color: '#DC2626', textAlign: 'left' as const }}>
+            <LogOut size={16} />
+            Sign Out
+          </button>
         </div>
 
         {/* Right content panel */}
@@ -827,6 +849,27 @@ function SettingsPage({ onBack, onMobilePreview }: { onBack: () => void; onMobil
                     </select>
                   </div>
                 </div>
+              </div>
+
+              {/* Role & access */}
+              <div style={{ backgroundColor: '#FFFFFF', borderRadius: 10, border: '1px solid #E5E7EB', padding: '24px 32px', marginBottom: 20 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: '#9CA3AF', letterSpacing: '0.08em', textTransform: 'uppercase' as const, marginBottom: 4 }}>Role &amp; Access</div>
+                <div style={{ height: 1, backgroundColor: '#F3F4F6', marginBottom: 18 }} />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, alignItems: 'end' }}>
+                  <div>
+                    <label style={labelStyle}>Switch Role</label>
+                    <select style={selectStyle} value={roleType} onChange={e => setRoleType(e.target.value)}>
+                      <option>Employee</option>
+                      <option>Manager</option>
+                      <option>HR Admin</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={labelStyle}>Type a Role</label>
+                    <input style={inputStyle} value={customRole} onChange={e => setCustomRole(e.target.value)} placeholder="e.g. Project Lead" />
+                  </div>
+                </div>
+                <div style={{ fontSize: 12, color: '#6B7280', marginTop: 12 }}>Choose a role from the list or enter a custom role for this profile.</div>
               </div>
 
               {/* Danger Zone */}
@@ -1001,22 +1044,33 @@ function MobileSettingsScreen({ onBack }: { onBack: () => void }) {
 
 // ── Root ───────────────────────────────────────────────────────────────────────
 export default function App() {
-  const [page, setPage] = useState<'dashboard' | 'request' | 'review' | 'settings' | 'mobile' | 'payroll'>('dashboard');
+  const [page, setPage] = useState<'dashboard' | 'request' | 'review' | 'settings' | 'mobile' | 'payroll' | 'leaves' | 'requests' | 'attendance' | 'schedule' | 'tasks'>('dashboard');
+  const [viewMode, setViewMode] = useState<'employee' | 'manager'>('employee');
   const isHR = page === 'review';
   const isSettings = page === 'settings' || page === 'mobile';
 
   const sidebarActive =
     isSettings ? 'settings' :
     page === 'payroll' ? 'payroll' :
+    page === 'schedule' ? 'schedule' :
+    page === 'tasks' ? 'tasks' :
+    page === 'leaves' ? 'leaves' :
+    page === 'attendance' ? 'attendance' :
+    page === 'requests' ? 'requests' :
     page === 'dashboard' ? 'dashboard' : 'requests';
 
   return (
-    <div style={{ width: 1440, height: 1024, backgroundColor: '#F4F5F7', display: 'flex' }}>
+    <div style={{ width: 1440, height: 1024, backgroundColor: '#F7F9FC', display: 'flex' }}>
       <Sidebar
         active={sidebarActive}
         onNavigate={(k) => {
           if (k === 'settings') setPage('settings');
           else if (k === 'payroll') setPage('payroll');
+          else if (k === 'schedule') setPage('schedule');
+          else if (k === 'tasks') setPage('tasks');
+          else if (k === 'leaves') { setPage('leaves'); setViewMode('employee'); }
+          else if (k === 'requests') { setPage('requests'); setViewMode('manager'); }
+          else if (k === 'attendance') setPage('attendance');
           else setPage('dashboard');
         }}
       />
@@ -1026,6 +1080,11 @@ export default function App() {
         {page === 'request' && <ManagementRequestForm onBack={() => setPage('dashboard')} />}
         {page === 'review' && <HRReviewPanel onBack={() => setPage('dashboard')} />}
         {page === 'payroll' && <PayrollPage />}
+        {page === 'schedule' && <SchedulePlannerTab />}
+        {page === 'tasks' && <FacultyTaskTab />}
+        {page === 'leaves' && <LeaveTab mode={viewMode} onModeChange={setViewMode} />}
+        {page === 'requests' && <LeaveTab mode={viewMode} onModeChange={setViewMode} />}
+        {page === 'attendance' && <AttendanceTab mode={viewMode} onModeChange={setViewMode} />}
         {page === 'settings' && <SettingsPage onBack={() => setPage('dashboard')} onMobilePreview={() => setPage('mobile')} />}
         {page === 'mobile' && <MobileSettingsScreen onBack={() => setPage('settings')} />}
       </div>

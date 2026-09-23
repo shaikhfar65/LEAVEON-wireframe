@@ -1,7 +1,29 @@
 @import 'tailwindcss';
 
+:root {
+  --primary: #243B53;
+  --secondary: #486581;
+  --background: #F7F9FC;
+  --surface: #FFFFFF;
+  --text: #1F2933;
+  --accent: #2F80ED;
+  --color-gray-50: #F7F9FC;
+  --color-gray-900: #1F2933;
+  --color-indigo-50: #EAF3FE;
+  --color-indigo-100: #D6E8FC;
+  --color-indigo-500: #2F80ED;
+  --color-indigo-600: #2F80ED;
+  --color-indigo-700: #1E64C8;
+}
+
 html,
 body,
 #root {
   height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: var(--text);
 }
